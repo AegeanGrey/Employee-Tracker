@@ -2,7 +2,11 @@
 const express = require('express');
 const mysql = require('mysql2');
 
-const PORT = process.env.PORT || 3001;
+// Takes the CLI Class from index.js and creates a new instance of it
+const CLI = require('./lib/index.js');
+const cli = new CLI();
+
+// Establishes express library call
 const app = express();
 
 // Middleware that anthing json will pass through first
@@ -20,6 +24,10 @@ const db = mysql.createConnection(
   console.log(`Connection successful`)
 );
 
+// Calls the run function within the CLI class
+cli.run();
+
+/*
 // Shows the department table contents in the console
 db.query('SELECT * FROM department', (err, result) => {
   if (err) {
@@ -46,8 +54,4 @@ db.query('SELECT * FROM employee', (err, result) => {
     console.log(result);
   }
 });
-
-// Terminal shows us the server connection is established via the port
-app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`);
-  });
+*/
