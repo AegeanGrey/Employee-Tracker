@@ -47,7 +47,7 @@ class CLI {
         case options[0]:
 
           // Shows all Departments w/ their id's and name
-          db.query('SELECT * FROM departments', (err, result) => {
+          db.query(`SELECT * FROM departments`, (err, result) => {
             if (err) {
               console.log(err);
             } else {
@@ -60,8 +60,8 @@ class CLI {
               
         case options[1]:
 
-          // Shows all Roles w/ their id's, titles and salary
-          db.query('SELECT departments.id, departments.department, role.title, role.salary FROM departments LEFT JOIN role ON departments.id = role.department_id', (err, result) => {
+          // Shows all Roles w/ their id's, titles, associated departments and salary
+          db.query(`SELECT role.id, role.title, departments.department, role.salary FROM departments LEFT JOIN role ON departments.id = role.department_id`, (err, result) => {
             if (err) {
               console.log(err);
             } else {
@@ -74,8 +74,8 @@ class CLI {
                   
         case options[2]:
 
-          // Shows all of the Employees w/ their id's, first and last names
-          db.query('SELECT id, first_name, last_name FROM employee', (err, result) => {
+          // Shows all of the Employees w/ their id's, first and last names, role, department, salary and manager
+          db.query(`SELECT employee.id, employee.first_name, employee.last_name, role.title, departments.department, role.salary, CONCAT(manager.first_name, ' ', manager.last_name) AS manager FROM departments LEFT JOIN role ON departments.id = role.department_id LEFT JOIN employee ON role.id = employee.role_id LEFT JOIN employee manager ON manager.id = employee.manager_id`, (err, result) => {
             if (err) {
               console.log(err);
             } else {
