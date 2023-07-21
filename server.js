@@ -19,7 +19,7 @@ const db = mysql.createConnection(
   {
     host: 'localhost',
     user: 'root',
-    password: 'Lma090807060504030201!',
+    password: '',
     database: 'employeeTracker_db'
   },
   console.log(`Connection successful`)
