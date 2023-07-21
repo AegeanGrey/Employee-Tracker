@@ -2,6 +2,7 @@
 const inquirer = require('inquirer');
 const express = require('express');
 const mysql = require('mysql2');
+const cTable = require('console.table');
 
 // Allows us to use options and question arrays from 'cli.js'
 const { options, question } = require('./lib/cli.js');
@@ -45,12 +46,13 @@ class CLI {
         // Once a match is found it will execute a line of code that the matched statement is associated with
         case options[0]:
 
-          // Shows all Departments w/ their name
+          // Shows all Departments w/ their id's and name
           db.query('SELECT * FROM department', (err, result) => {
             if (err) {
               console.log(err);
             } else {
-              console.log(result);
+              const table = cTable.getTable(result);
+              console.log(`\n` + table);
               cli.run();
             }
           });
@@ -58,12 +60,13 @@ class CLI {
               
         case options[1]:
 
-          // Shows all Roles w/ their titles and salary
-          db.query('SELECT title, salary FROM role', (err, result) => {
+          // Shows all Roles w/ their id's, titles and salary
+          db.query('SELECT id, title, salary FROM role', (err, result) => {
             if (err) {
               console.log(err);
             } else {
-              console.log(result);
+              const table = cTable.getTable(result);
+              console.log(`\n` + table);
               cli.run();
             }
           });
@@ -71,12 +74,13 @@ class CLI {
                   
         case options[2]:
 
-          // Shows all of the Employees w/ their first and last names
-          db.query('SELECT first_name, last_name FROM employee', (err, result) => {
+          // Shows all of the Employees w/ their id's, first and last names
+          db.query('SELECT id, first_name, last_name FROM employee', (err, result) => {
             if (err) {
               console.log(err);
             } else {
-              console.log(result);
+              const table = cTable.getTable(result);
+              console.log(`\n` + table);
               cli.run();
             }
           });
