@@ -47,7 +47,7 @@ class CLI {
         case options[0]:
 
           // Shows all Departments w/ their id's and name
-          db.query('SELECT * FROM department', (err, result) => {
+          db.query('SELECT * FROM departments', (err, result) => {
             if (err) {
               console.log(err);
             } else {
@@ -61,7 +61,7 @@ class CLI {
         case options[1]:
 
           // Shows all Roles w/ their id's, titles and salary
-          db.query('SELECT id, title, salary FROM role', (err, result) => {
+          db.query('SELECT departments.id, departments.department, role.title, role.salary FROM departments LEFT JOIN role ON departments.id = role.department_id', (err, result) => {
             if (err) {
               console.log(err);
             } else {
