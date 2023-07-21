@@ -35,27 +35,51 @@ class CLI {
     // Takes user response stored in 'userSelect'
     .then(({ userSelect }) => {
 
+    let newDepartment;
+    let newRole;
+    let newEmployee;
+
     // Switch case that compares 'userSelect' with the 'options' array to find a match
     switch (userSelect) {
       
         // Once a match is found it will execute a line of code that the matched statement is associated with
         case options[0]:
-          db.query('SELECT name FROM department', (err, result) => {
-          if (err) {
-            console.log(err);
-          } else {
-            console.log(result);
-            cli.run();
-          }
-        });
+
+          // Shows all Departments w/ their name
+          db.query('SELECT * FROM department', (err, result) => {
+            if (err) {
+              console.log(err);
+            } else {
+              console.log(result);
+              cli.run();
+            }
+          });
         break;
               
         case options[1]:
-          console.log('Viewing all Roles');
+
+          // Shows all Roles w/ their titles and salary
+          db.query('SELECT title, salary FROM role', (err, result) => {
+            if (err) {
+              console.log(err);
+            } else {
+              console.log(result);
+              cli.run();
+            }
+          });
         break;
                   
         case options[2]:
-          console.log('Viewing all Employees');
+
+          // Shows all of the Employees w/ their first and last names
+          db.query('SELECT first_name, last_name FROM employee', (err, result) => {
+            if (err) {
+              console.log(err);
+            } else {
+              console.log(result);
+              cli.run();
+            }
+          });
         break;
   
         case options[3]:
@@ -75,7 +99,15 @@ class CLI {
         break;
       
         case options[7]:
-          console.log('Exiting Application');
+
+          // Disconnects the user from the application
+          db.end(function(err) {
+            if (err) {
+              console.log(err);
+            } else {
+              console.log('Goodbye');
+            }
+          });
         break;
         }
     });           
@@ -87,35 +119,3 @@ const cli = new CLI();
 
 // Calls the run function within the CLI class
 cli.run();
-
-/*
-// Shows the department table contents in the console
-function viewDepartments() {
-  db.query('SELECT * FROM department', (err, result) => {
-      if (err) {
-      console.log(err);
-    } else {
-      console.log(result);
-    }
-  });
-}
-
-
-// Shows the role table contents in the console
-db.query('SELECT * FROM role', (err, result) => {
-  if (err) {
-    console.log(err);
-  } else {
-    console.log(result);
-  }
-});
-
-// Shows the employee table contents in the console
-db.query('SELECT * FROM employee', (err, result) => {
-  if (err) {
-    console.log(err);
-  } else {
-    console.log(result);
-  }
-});
-*/
