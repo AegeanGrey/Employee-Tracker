@@ -5,7 +5,7 @@ const mysql = require('mysql2');
 const cTable = require('console.table');
 
 // Allows us to use options and question arrays from 'cli.js'
-const { options, question } = require('./lib/cli.js');
+const { options, question, department } = require('./lib/cli.js');
 
 // Establishes express library call
 const app = express();
@@ -25,6 +25,30 @@ const db = mysql.createConnection(
   console.log(`Connection successful`)
 );
 
+// When called will prompt the user to input a name to add a new department
+function addDepartment() {
+  return inquirer
+
+  // Prompts the user with the department array
+  .prompt(department)
+
+  // Takes the user input and stores it in 'userDepartment'
+  .then(({ userDepartment }) => {
+
+    // Query call to the database that inserts 'userDepartment' as the value
+    db.query(`INSERT INTO departments(department) VALUES('${userDepartment}')`, (err) => {
+      if (err) {
+        console.log(err);
+
+      // If there's no error then it will log to the console that the new department has been added
+      } else {
+        console.log(`${userDepartment} has been added to departments`)
+        cli.run();
+      }
+    });
+  });
+}
+
 class CLI {
   constructor () {}
   run() {
@@ -36,7 +60,6 @@ class CLI {
     // Takes user response stored in 'userSelect'
     .then(({ userSelect }) => {
 
-    let newDepartment;
     let newRole;
     let newEmployee;
 
@@ -44,9 +67,9 @@ class CLI {
     switch (userSelect) {
       
         // Once a match is found it will execute a line of code that the matched statement is associated with
-        case options[0]:
 
-          // Shows all Departments w/ their id's and name
+        // Shows all Departments w/ their id's and name
+        case options[0]:
           db.query(`SELECT * FROM departments`, (err, result) => {
             if (err) {
               console.log(err);
@@ -58,9 +81,8 @@ class CLI {
           });
         break;
               
+        // Shows all Roles w/ their id's, titles, associated departments and salary
         case options[1]:
-
-          // Shows all Roles w/ their id's, titles, associated departments and salary
           db.query(`SELECT role.id, role.title, departments.department, role.salary FROM departments LEFT JOIN role ON departments.id = role.department_id`, (err, result) => {
             if (err) {
               console.log(err);
@@ -72,9 +94,8 @@ class CLI {
           });
         break;
                   
+        // Shows all of the Employees w/ their id's, first and last names, role, department, salary and manager
         case options[2]:
-
-          // Shows all of the Employees w/ their id's, first and last names, role, department, salary and manager
           db.query(`SELECT employee.id, employee.first_name, employee.last_name, role.title, departments.department, role.salary, CONCAT(manager.first_name, ' ', manager.last_name) AS manager FROM departments LEFT JOIN role ON departments.id = role.department_id LEFT JOIN employee ON role.id = employee.role_id LEFT JOIN employee manager ON manager.id = employee.manager_id`, (err, result) => {
             if (err) {
               console.log(err);
@@ -86,8 +107,9 @@ class CLI {
           });
         break;
   
+        // Calls addDepartment function to add the users input of a new department to th
         case options[3]:
-          console.log('Adding a new Department');
+          addDepartment();
         break;
               
         case options[4]:
