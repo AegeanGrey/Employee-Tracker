@@ -5,7 +5,7 @@ const mysql = require('mysql2');
 const cTable = require('console.table');
 
 // Allows us to use options and question arrays from 'cli.js'
-const { options, question, department } = require('./lib/cli.js');
+const { options, question, department, role } = require('./lib/cli.js');
 
 // Establishes express library call
 const app = express();
@@ -49,6 +49,52 @@ function addDepartment() {
   });
 }
 
+// When called will prompt the user to input a new role name, it's salary and the department it's associated with
+function addRole(result) {
+
+  // The stored query response will then be created into a new array for us to display the departments name to the user while their response is recognized as the departments ID
+  var savedDepartments = result.map(departments => ({
+    name: departments.department,
+    value: departments.id
+  }));
+
+  // 2nd question that displays all of the departments from 'savedDepartments' variable for the user to select
+  const role2 = [
+    {
+        type: 'list',
+        name: 'userDepartment',
+        message: 'Which department does this role belong to?',
+        choices: savedDepartments
+    }
+  ];
+
+  // 1st prompt that asks the name of the new role and their salary
+  inquirer.prompt(role)
+
+  // Stores response in 'userRole' and 'userSalary'
+  .then(({ userRole, userSalary }) => {
+
+    // 2nd prompt that asks the user the department the role belongs to 
+    inquirer.prompt(role2)
+
+    // The users response will save the selected departments ID to 'userDepartment'
+    .then(({ userDepartment }) => {
+
+        // Query call that will INSERT the users responses in the title, salary and associated department_id
+      db.query(`INSERT INTO role(title, salary, department_id) VALUES('${userRole}', ${userSalary}, ${userDepartment})`, (err) => {
+          if (err) {
+          console.log(err);
+
+          // If there are no errors then it will confirm the new role has been created to the console
+          } else {
+          console.log(`${userRole} role has been created`)
+          cli.run();
+          }
+      });
+    });
+  });
+}
+
 class CLI {
   constructor () {}
   run() {
@@ -60,7 +106,6 @@ class CLI {
     // Takes user response stored in 'userSelect'
     .then(({ userSelect }) => {
 
-    let newRole;
     let newEmployee;
 
     // Switch case that compares 'userSelect' with the 'options' array to find a match
@@ -107,13 +152,22 @@ class CLI {
           });
         break;
   
-        // Calls addDepartment function to add the users input of a new department to th
+        // Calls 'addDepartment' function to add the users input of a new department to th
         case options[3]:
           addDepartment();
         break;
               
+        // Runs a query to get all departments for the user to select/associate their new created role with
         case options[4]:
-          console.log('Adding a new Role');
+          db.query(`SELECT * FROM departments`, (err, result) => {
+            if (err) {
+              console.log(err);
+
+            // If there are no errors then it will call the 'addRole' function while passing the query response as 'result' 
+            } else {
+              addRole(result);    
+            }
+          });
         break;
                   
         case options[5]:
