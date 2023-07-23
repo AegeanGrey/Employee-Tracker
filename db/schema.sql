@@ -5,14 +5,14 @@ USE employeeTracker_db;
 
 CREATE TABLE departments (
   id INT PRIMARY KEY AUTO_INCREMENT,
-  department VARCHAR(30)
+  department VARCHAR(30) NOT NULL
 );
 
 CREATE TABLE role (
   id INT PRIMARY KEY AUTO_INCREMENT,
-  title VARCHAR(30),
-  salary DECIMAL,
-  department_id INT,
+  title VARCHAR(30) NOT NULL,
+  salary DECIMAL NOT NULL,
+  department_id INT NOT NULL,
   FOREIGN KEY (department_id) REFERENCES departments(id)
 );
 
