@@ -171,11 +171,15 @@ class CLI {
         break;
                   
         case options[5]:
-          console.log('Adding a new Employee');
+          // console.log('Adding a new Employee');
+          console.log(`Feature coming soon!`);
+          cli.run();
         break;
                       
         case options[6]:
-          console.log('Updating an Employee');
+          // console.log('Updating an Employee');
+          console.log(`Feature coming soon!`);
+          cli.run();
         break;
       
         case options[7]:
