@@ -26,21 +26,13 @@ git@github.com:AegeanGrey/employee-tracker.git
 
 `code .`
 
-We will then need to install the required packages/modules for the README Generator to work:
+We will then need to install the required packages/modules for the Employee-Tracker to work:
 
 4.) In the Code Editor, right click on the 'index.js' file and select 'Open in Integrated Terminal'
 
 5.) In the Terminal, type in the following to install the required packages:
 
 `npm i`
-
-We will then need to install the required packages/modules for the README Generator to work:
-
-4.) In the Code Editor, right click on the 'index.js' file and select 'Open in Integrated Terminal'
-
-5.) In the Terminal, type in the following to install the required packages:
-
-npm i
 
 ## Usage
 1.) Type the following into the Terminal to run the application:
